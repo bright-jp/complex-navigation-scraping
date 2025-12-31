@@ -1,6 +1,6 @@
 # 複雑なナビゲーションを持つWebサイトのスクレイピング
 
-[![Promo](https://github.com/luminati-io/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://brightdata.jp/) 
+[![Promo](https://github.com/bright-jp/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://brightdata.jp/) 
 
 このガイドでは、Selenium とブラウザ自動化を使用して、動的ページネーション、無限スクロール、「Load More」ボタンなどの複雑なナビゲーションパターンを持つWebサイトをスクレイピングする方法を解説します。Selenium とブラウザ自動化を使用します。
 
@@ -42,7 +42,7 @@ Python の Selenium を使用しますが、ロジックは Playwright、Puppete
 
 スクレイピング用サンドボックスとして、「[Oscar Winning Films: AJAX and Javascript](https://www.scrapethissite.com/pages/ajax-javascript/#2014)」を使用します。
 
-![The target page. Note how pagination data is loaded dynamically](https://github.com/luminati-io/complex-navigation-scraping/blob/main/Images/Dynamic-pagniation-example-1536x752.gif)
+![The target page. Note how pagination data is loaded dynamically](https://github.com/bright-jp/complex-navigation-scraping/blob/main/Images/Dynamic-pagniation-example-1536x752.gif)
 
 このサイトは、年ごとにページ分割されたアカデミー賞受賞作品データを動的に読み込みます。
 
@@ -156,7 +156,7 @@ driver.quit()
 
 今回は、Scraping Course の [‘Load More’ example](https://www.scrapingcourse.com/button-click) ページを対象サイトとします。
 
-![The ‘Load More’ target page in action](https://github.com/luminati-io/complex-navigation-scraping/blob/main/Images/Clicking-on-the-load-more-button-1536x752.gif)
+![The ‘Load More’ target page in action](https://github.com/bright-jp/complex-navigation-scraping/blob/main/Images/Clicking-on-the-load-more-button-1536x752.gif)
 
 この複雑ナビゲーションのスクレイピングパターンに対応するには、次の手順に従ってください。
 
@@ -229,7 +229,7 @@ driver.quit()
 
 無限スクロールは、ユーザーエンゲージメントを高めるためにソーシャルメディアやEコマースプラットフォームで広く使われている人気のインタラクションです。この場合、対象は上記と同じページですが、[‘Load More’ ボタンの代わりに無限スクロール](https://www.scrapingcourse.com/infinite-scrolling) を使用します。
 
-![infinite scrolling instead of a 'Load More' button](https://github.com/luminati-io/complex-navigation-scraping/blob/main/Images/Infinite-scrolling-example-1024x501.gif)
+![infinite scrolling instead of a 'Load More' button](https://github.com/bright-jp/complex-navigation-scraping/blob/main/Images/Infinite-scrolling-example-1024x501.gif)
 
 多くのブラウザ自動化ツールは、ページを上下にスクロールするための直接的なメソッドを提供しておらず、Selenium も例外ではありません。代わりに、ページ上で JavaScript を実行してスクロール操作を行う必要があります。
 
