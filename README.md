@@ -1,59 +1,59 @@
-# Scraping Websites With Complex Navigation
+# 複雑なナビゲーションを持つWebサイトのスクレイピング
 
-[![Promo](https://github.com/luminati-io/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://brightdata.com/) 
+[![Promo](https://github.com/luminati-io/LinkedIn-Scraper/raw/main/Proxies%20and%20scrapers%20GitHub%20bonus%20banner.png)](https://brightdata.jp/) 
 
-This guide explains how to use Selenium and browser automation to scrape websites with complex navigation patterns, such as dynamic pagination, infinite scrolling, and ‘Load More’ buttons, using Selenium and browser automation.
+このガイドでは、Selenium とブラウザ自動化を使用して、動的ページネーション、無限スクロール、「Load More」ボタンなどの複雑なナビゲーションパターンを持つWebサイトをスクレイピングする方法を解説します。Selenium とブラウザ自動化を使用します。
 
-- [What Is Considered Complex Navigation?](#what-is-considered-complex-navigation)
-- [Tools to Handle Complex Navigation Websites](#tools-to-handle-complex-navigation-websites)
-- [Scraping Common Complex Navigation Patterns](#scraping-common-complex-navigation-patterns)
-  - [Dynamic Pagination](#dynamic-pagination)
-  - [‘Load More’ Button](#load-more-button)
-  - [Infinite Scrolling](#infinite-scrolling)
-- [Conclusion](#conclusion)
+- [複雑なナビゲーションとは何と見なされますか？](#what-is-considered-complex-navigation)
+- [複雑なナビゲーションWebサイトに対応するツール](#tools-to-handle-complex-navigation-websites)
+- [一般的な複雑ナビゲーションパターンのスクレイピング](#scraping-common-complex-navigation-patterns)
+  - [動的ページネーション](#dynamic-pagination)
+  - [‘Load More’ ボタン](#load-more-button)
+  - [無限スクロール](#infinite-scrolling)
+- [結論](#conclusion)
 
-## What Is Considered Complex Navigation?
+## 複雑なナビゲーションとは何と見なされますか？
 
-In web scraping, complex navigation refers to website structures where content or pages are not easily accessible. Complex navigation scenarios often involve dynamic elements, asynchronous data loading, or user-driven interactions. These aspects may enhance user experiences, but they also significantly complicate data extraction. Here are some very common examples:
+Webスクレイピングにおいて、複雑なナビゲーションとは、コンテンツやページに容易にアクセスできないWebサイト構造を指します。複雑なナビゲーションのシナリオでは、動的要素、非同期のデータ読み込み、またはユーザー主導のインタラクションが関与することが多いです。これらの要素はユーザー体験を向上させる一方で、データ抽出を大幅に複雑にします。よくある例は次のとおりです。
 
-- **JavaScript-rendered navigation**: Websites that rely on JavaScript frameworks to generate content directly in the browser.
-- **Paginated content**: Sites with data spread across multiple pages where pagination is loaded dynamically via AJAX.
-- **Infinite scrolling**: Pages that load additional content dynamically as users scroll, typical for social media feeds, Discourse-based forums, and news websites.
-- **Multi-level menus**: Sites with nested menus requiring multiple clicks or hover actions to reveal deeper layers of navigation, common for product category trees on marketplaces.
-- **Interactive map interfaces**: Websites displaying data on maps or graphs, where information is dynamically loaded as users pan or zoom.
-- **Tabs or accordions**: Pages with content hidden under dynamically rendered tabs or collapsible accordions that are not directly embedded in the HTML returned by the server.
-- **Dynamic filters and sorting options**: Sites with complex filtering systems where applying multiple filters reloads the item listing dynamically without altering the URL structure.
+- **JavaScriptレンダリングのナビゲーション**: JavaScriptフレームワークに依存してブラウザ内で直接コンテンツを生成するWebサイトです。
+- **ページ分割されたコンテンツ**: データが複数ページに分散しており、ページネーションが AJAX により動的に読み込まれるサイトです。
+- **無限スクロール**: ユーザーがスクロールするたびに追加コンテンツを動的に読み込むページです。ソーシャルメディアのフィード、Discourseベースのフォーラム、ニュースサイトなどで典型的です。
+- **多階層メニュー**: ネストされたメニューを持ち、より深いナビゲーション階層を表示するために複数回のクリックやホバー操作が必要なサイトです。マーケットプレイスのプロダクトカテゴリツリーなどで一般的です。
+- **インタラクティブな地図インターフェース**: 地図やグラフ上にデータを表示し、ユーザーのパンやズームに応じて情報が動的に読み込まれるWebサイトです。
+- **タブまたはアコーディオン**: 動的にレンダリングされるタブや折りたたみ式アコーディオンの下にコンテンツが隠れており、サーバーから返されるHTMLに直接埋め込まれていないページです。
+- **動的フィルターと並び替えオプション**: 複雑なフィルタリングシステムを持ち、複数のフィルター適用によりURL構造を変更せずにアイテム一覧が動的に再読み込みされるサイトです。
 
-## Tools to Handle Complex Navigation Websites
+## 複雑なナビゲーションWebサイトに対応するツール
 
-Many of the complex interactions listed above need JavaScript execution, something only a browser can do. This means you cannot rely on simple [HTML parsers](https://brightdata.com/blog/web-data/best-html-parsers) for such pages. Instead, you must use a browser automation tool like Selenium, Playwright, or Puppeteer. These solutions allow you to programmatically instruct a browser to perform specific actions on a web page, mimicking user behavior.
+上記の複雑なインタラクションの多くは JavaScript の実行を必要とします。これはブラウザだけが実行できることです。つまり、そのようなページでは単純な [HTML parsers](https://brightdata.jp/blog/web-data/best-html-parsers) に頼ることはできません。代わりに、Selenium、Playwright、Puppeteer のようなブラウザ自動化ツールを使用する必要があります。これらのソリューションにより、ブラウザに対してWebページ上で特定のアクションを実行するようプログラムで指示でき、ユーザー行動を模倣できます。
 
-## Scraping Common Complex Navigation Patterns
+## 一般的な複雑ナビゲーションパターンのスクレイピング
 
-This guides covers three specific types of complex navigation patterns:
+このガイドでは、複雑なナビゲーションパターンのうち、次の3種類を扱います。
 
-- **Dynamic pagination**: Sites with paginated data loaded dynamically via AJAX.
-- **‘Load More’ button**: A common JavaScript-based navigation example.
-- **Infinite scrolling**: A page that continuously loads data as the user scrolls down.
+- **動的ページネーション**: AJAX により動的に読み込まれるページ分割データを持つサイトです。
+- **‘Load More’ ボタン**: JavaScriptベースのナビゲーションの一般的な例です。
+- **無限スクロール**: ユーザーが下にスクロールするにつれて継続的にデータを読み込むページです。
 
-We will use Selenium in Python, but the logic can be adapted to Playwright, Puppeteer, or any other browser automation tools. The guide also assumes that you are already familiar with the basics of [web scraping using Selenium](https://brightdata.com/blog/how-tos/using-selenium-for-web-scraping).
+Python の Selenium を使用しますが、ロジックは Playwright、Puppeteer、または他のブラウザ自動化ツールにも適用できます。また、このガイドでは、すでに [web scraping using Selenium](https://brightdata.jp/blog/how-tos/using-selenium-for-web-scraping) の基礎を理解していることを前提としています。
 
-### Dynamic Pagination
+### 動的ページネーション
 
-We will use the “[Oscar Winning Films: AJAX and Javascript](https://www.scrapethissite.com/pages/ajax-javascript/#2014)” scraping sandbox:
+スクレイピング用サンドボックスとして、「[Oscar Winning Films: AJAX and Javascript](https://www.scrapethissite.com/pages/ajax-javascript/#2014)」を使用します。
 
 ![The target page. Note how pagination data is loaded dynamically](https://github.com/luminati-io/complex-navigation-scraping/blob/main/Images/Dynamic-pagniation-example-1536x752.gif)
 
-This site dynamically loads Oscar-winning film data, paginated by year.
+このサイトは、年ごとにページ分割されたアカデミー賞受賞作品データを動的に読み込みます。
 
-To navigate and scrape such a page effectively, you need to follow the following steps:
+このようなページを効果的にナビゲートしてスクレイピングするには、次の手順に従う必要があります。
 
-1. Click on a new year to trigger data loading (a loader element will appear).
-2. Wait for the loader element to disappear (indicating the data has fully loaded).
-3. Verify that the table with the data has been properly rendered on the page.
-4. Scrape the data once it becomes available.
+1. 新しい年をクリックしてデータ読み込みをトリガーします（ローダー要素が表示されます）。
+2. ローダー要素が消えるのを待ちます（データが完全に読み込まれたことを示します）。
+3. データを含むテーブルがページ上で正しくレンダリングされたことを確認します。
+4. データが利用可能になったらスクレイピングします。
 
-Below is an example of how to implement this logic using Selenium in Python:
+以下は、Python の Selenium を使ってこのロジックを実装する例です。
 
 ```python
 from selenium import webdriver
@@ -116,15 +116,15 @@ for row in rows:
 driver.quit()
 ```
 
-Here is the breakdown of that code snippet:
+このコードスニペットの内訳は次のとおりです。
 
-1.  The code sets up a headless Chrome instance.
-2.  The script opens the target page and clicks the “2012” pagination button to trigger data loading.
-3.  Selenium waits for the loader to disappear using [`WebDriverWait()`](https://selenium-python.readthedocs.io/waits.html).
-4.  After the loader disappears, the script waits for the table to appear.
-5.  After the data is fully loaded, the script extracts details such as film titles, nominations, awards, and whether the film won Best Picture. The extracted information is then stored in a list of dictionaries.
+1.  コードはヘッドレスの Chrome インスタンスをセットアップします。
+2.  スクリプトは対象ページを開き、「2012」のページネーションボタンをクリックしてデータ読み込みをトリガーします。
+3.  Selenium は [`WebDriverWait()`](https://selenium-python.readthedocs.io/waits.html) を使用してローダーが消えるのを待ちます。
+4.  ローダーが消えた後、スクリプトはテーブルが表示されるのを待ちます。
+5.  データが完全に読み込まれた後、スクリプトは作品タイトル、ノミネート数、受賞数、作品賞受賞の有無などの詳細を抽出します。抽出した情報は辞書のリストに保存されます。
 
-The result will be:
+結果は次のようになります。
 
 ```json
 [
@@ -144,26 +144,26 @@ The result will be:
 ]
 ```
 
-Keep in mind that there isn’t always a single best approach to handling this navigation pattern. Alternative methods may be necessary depending on the page's behavior. Here are some examples:
+このナビゲーションパターンの扱いに、常に単一の最良アプローチがあるとは限らない点に留意してください。ページの挙動によっては代替手法が必要になる場合があります。例をいくつか挙げます。
 
-*   Use `WebDriverWait()` in combination with expected conditions to wait for specific HTML elements to appear or disappear.
-*   Monitor traffic for AJAX requests to detect when new content is fetched. This may involve using browser logging.
-*   Identify the API request triggered by pagination and make direct requests to fetch the data programmatically (e.g., using the [`requests` library](https://brightdata.com/blog/web-data/python-requests-guide)).
+*   `WebDriverWait()` を expected conditions と組み合わせて、特定のHTML要素の表示/非表示を待ちます。
+*   AJAX のリクエストトラフィックを監視して、新しいコンテンツが取得されたタイミングを検出します。これにはブラウザログの利用が関与する場合があります。
+*   ページネーションによってトリガーされるAPIリクエストを特定し、直接リクエストしてプログラム的にデータを取得します（例: [`requests` library](https://brightdata.jp/blog/web-data/python-requests-guide) を使用）。
 
-### ‘Load More’ Button
+### ‘Load More’ ボタン
 
-To illustrate JavaScript-based complex navigation scenarios involving user interactions, let's use an example of a 'Load More' button. The concept is straightforward: a list of items is displayed, and clicking the button loads additional items.
+ユーザー操作を伴う JavaScript ベースの複雑なナビゲーションシナリオを示すために、「Load More」ボタンの例を使用します。概念は単純で、アイテムのリストが表示されており、ボタンをクリックすると追加アイテムが読み込まれます。
 
-This time, the target site will be the [‘Load More’ example](https://www.scrapingcourse.com/button-click) page from the Scraping Course:
+今回は、Scraping Course の [‘Load More’ example](https://www.scrapingcourse.com/button-click) ページを対象サイトとします。
 
 ![The ‘Load More’ target page in action](https://github.com/luminati-io/complex-navigation-scraping/blob/main/Images/Clicking-on-the-load-more-button-1536x752.gif)
 
-To handle this complex navigation scraping pattern, follow these steps:
+この複雑ナビゲーションのスクレイピングパターンに対応するには、次の手順に従ってください。
 
-1.  Find the ‘Load More’ button and click it.
-2.  Wait for the new elements to load onto the page.
+1.  ‘Load More’ ボタンを見つけてクリックします。
+2.  新しい要素がページに読み込まれるのを待ちます。
 
-Here is the code to use with Selenium:
+Selenium で使用するコードは次のとおりです。
 
 ```python
 from selenium import webdriver
@@ -217,33 +217,33 @@ for product_element in product_elements:
 driver.quit()
 ```
 
-To handle the 'Load More' button navigation pattern, the script:
+‘Load More’ ボタンのナビゲーションパターンに対応するために、このスクリプトは次を行います。
 
-1.  Records the initial number of products on the page
-2.  Clicks the “Load More” button
-3.  Waits until the product count increases, confirming that new items have been added
+1.  ページ上の初期プロダクト数を記録します
+2.  「Load More」ボタンをクリックします
+3.  プロダクト数が増えるまで待機し、新しいアイテムが追加されたことを確認します
 
-This approach is both efficient and versatile, as it eliminates the need to know the exact number of elements to be loaded. However, alternative methods can also achieve similar results.
+このアプローチは、読み込まれる要素数を正確に把握する必要がなくなるため、効率的かつ汎用的です。ただし、代替手法でも同様の結果を得られます。
 
-### Infinite Scrolling
+### 無限スクロール
 
-Infinite scrolling is a popular interaction widely used on social media and e-commerce platforms to enhance user engagement. In this case, the target will be the same page as above but with [infinite scrolling instead of a ‘Load More’ button](https://www.scrapingcourse.com/infinite-scrolling):
+無限スクロールは、ユーザーエンゲージメントを高めるためにソーシャルメディアやEコマースプラットフォームで広く使われている人気のインタラクションです。この場合、対象は上記と同じページですが、[‘Load More’ ボタンの代わりに無限スクロール](https://www.scrapingcourse.com/infinite-scrolling) を使用します。
 
 ![infinite scrolling instead of a 'Load More' button](https://github.com/luminati-io/complex-navigation-scraping/blob/main/Images/Infinite-scrolling-example-1024x501.gif)
 
-Most browser automation tools do not provide a direct method for scrolling down or up a page, and Selenium is not an exception. Instead, you need to execute a JavaScript script on the page to perform the scrolling operation.
+多くのブラウザ自動化ツールは、ページを上下にスクロールするための直接的なメソッドを提供しておらず、Selenium も例外ではありません。代わりに、ページ上で JavaScript を実行してスクロール操作を行う必要があります。
 
-The solution is to write a custom JavaScript script that scrolls down:
+解決策は、下方向にスクロールするカスタム JavaScript を書くことです。
 
-1.  A specified number of times, or
-2.  Until no more data is available to load.
+1.  指定回数だけ、または
+2.  追加データがこれ以上読み込めなくなるまで
 
 > **Note**:\
-> Each scroll loads new data and increments the number of elements on the page.
+> 各スクロールで新しいデータが読み込まれ、ページ上の要素数が増加します。
 
-After that, you can scrape the newly loaded content.
+その後、新しく読み込まれたコンテンツをスクレイピングできます。
 
-Here is the code to use infinite scrolling in Selenium:
+以下は、Selenium で無限スクロールを行うためのコードです。
 
 ```python
 from selenium import webdriver
@@ -316,16 +316,16 @@ for product_element in product_elements:
 driver.quit() 
 ```
 
-This script handles infinite scrolling by first identifying the current page height and product count. It limits the scrolling process to a maximum of 10 iterations. During each iteration, it:
+このスクリプトは、まず現在のページ高さとプロダクト数を特定することで無限スクロールを処理します。スクロール処理は最大10回の反復に制限されます。各反復では次を実行します。
 
-1.  Scrolls down to the bottom
-2.  Waits for the product count to increase (indicating new content has loaded)
-3.  Compares the page height to detect whether further content is available
+1.  最下部までスクロールします
+2.  プロダクト数が増えるまで待機します（新しいコンテンツが読み込まれたことを示します）
+3.  ページ高さを比較して、追加コンテンツが利用可能かどうかを検出します
 
-If the page height remains unchanged after a scroll, the loop terminates, signaling that there is no more data to load.
+スクロール後もページ高さが変わらない場合、ループは終了し、これ以上読み込むデータがないことを示します。
 
-## Conclusion
+## 結論
 
-Web scraping can be challenging when complex navigation patterns are involved, businesses can make it even more difficult by employing anti-scraping measures to block automated scripts. Browser automation tools, like Selenium, cannot bypass those restrictions.
+複雑なナビゲーションパターンが関与するとWebスクレイピングは困難になり得ます。さらに企業側が、アンチスクレイピング対策を採用して自動化スクリプトをブロックすると、いっそう難しくなります。Selenium のようなブラウザ自動化ツールでは、それらの制限を回避できません。
 
-The solution is to use a cloud-based browser like [Scraping Browser](https://brightdata.com/products/scraping-browser) which integrates with Playwright, Puppeteer, Selenium, and other tools, automatically rotating IPs with each request. It can manage browser fingerprinting, retries, CAPTCHA solving, and more. Say goodbye to getting blocked when navigating complex sites!
+解決策は、Playwright、Puppeteer、Selenium などのツールと統合でき、各リクエストでIPを自動的にローテーションするクラウドベースのブラウザである [Scraping Browser](https://brightdata.jp/products/scraping-browser) を使用することです。ブラウザフィンガープリント、リトライ、CAPTCHA 解決などを管理できます。複雑なサイトをナビゲートする際にブロックされる状況に別れを告げましょう！
